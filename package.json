@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "base-64": "^1.0.0",
     "blockly": "^9.3.3",
+    "cross-fetch": "^3.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
+    "sweetalert2": "^11.7.5",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
