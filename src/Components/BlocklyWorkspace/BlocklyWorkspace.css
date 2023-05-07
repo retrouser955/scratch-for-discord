@@ -1,0 +1,30 @@
+.blocklyFlyoutScrollbar[display="none"] {
+    display: none;
+}
+
+/* Toolbox Styling */
+.sepDark {
+    border-bottom: solid #293448 1px;
+    height: 1px;
+    margin: 5px 0;
+}
+
+.blocklyTreeLabel {
+    text-align: center;
+}
+
+/* Adds padding around the group of categories and separators. */
+.blocklyToolboxContents {
+    padding: 0.2em;
+}
+
+/* Adds space between the categories, rounds the corners and adds space around the label. */
+.blocklyTreeRow {
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.blocklyTreeRowContentContainer {
+    display: flex;
+    align-items: center;
+}
