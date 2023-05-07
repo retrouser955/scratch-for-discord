@@ -18,7 +18,9 @@ if (code) {
   const body = {
     "code": code
   }
-  console.log(body)
+if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
+  body.redirectUri = "https://scratch-for-discord-nine.vercel.app/"
+}
   fetch('https://s4d-api.xl83.dev/api/v1/user/githubsc/', {
     method: 'POST',
     mode: "no-cors",
@@ -189,8 +191,17 @@ function selectRepo() {
     })
 }
 
+function oauth() {
+  if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
+    window.location = "https://github.com/login/oauth/authorize?scope=repo&client_id=bf929a64f389bd8aa375"
+  } else {
+    window.location = "https://github.com/login/oauth/authorize?scope=repo&client_id=b6d2e4d50218cbda081b"
+  }
+}
+
 export {
   push,
   pull,
-  selectRepo
+  selectRepo,
+  oauth
 }
