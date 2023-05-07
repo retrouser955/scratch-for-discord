@@ -11,10 +11,6 @@ if (code) {
   var changeUrl = new URL(document.location.href);
   changeUrl.searchParams.delete('code');
   window.history.replaceState({}, document.title, changeUrl);
-  if (!
-    import.meta.env.VITE_SEC) {
-    alert("no .env secret found :( ask neko for secret so you can add it locally :3")
-  }
   const body = {
     "code": code
   }
