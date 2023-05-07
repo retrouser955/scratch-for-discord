@@ -4,6 +4,11 @@ import Blockly from "blockly"
 import createBlocklyWorkspace from '../../helpers/createBlocklyWorkspace'
 import toolbox from "../../Blockly/toolbox"
 
+// Load the blocks
+
+// For cleaner code, every block will be loaded in "../../Blockly/Blocks/index.js" as I do not want to flood this file
+import "../../Blockly/Blocks/index.js"
+
 export default function BlocklyWorkspace({ hidden }) {
     const isHidden = useRef()
 
