@@ -32,7 +32,6 @@ if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
         localStorage.setItem("accessToken", res.code)
         localStorage.setItem("isTokenValid", "true")
         // updateGitUi("show")
-        console.log("plssss")
         fetch('https://api.github.com/user', {
             headers: {
               Authorization: `token ${localStorage.getItem("accessToken")}`
