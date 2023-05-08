@@ -3,10 +3,10 @@ import {oauth} from "../../../../sourceControl"
 
 function UserCard({ userData }) {
   return (
-    <div className="w-[90%] h-60 border-2 pb-3 border-white rounded-lg mx-auto">
-      <img src={userData.avatar_url} alt={`${userData.login} avatar`} className="mx-auto rounded-full mb-2" />
-      <h1 className="text-center text-4xl text-white font-semibold">{userData.login}</h1>
-      <h2 className="text-center text-zinc-400 text-2xl">{userData.name}</h2>
+    <div className="w-[80%] h-60 border-2 pt-5 border-white rounded-lg mx-auto">
+      <img src={userData.avatar_url} alt={`${userData.login} avatar`} className="mx-auto rounded-full w-[70%] mb-2" />
+      <h1 className="text-center text-2xl truncate text-white font-semibold">{userData.login}</h1>
+      <p className="text-center text-zinc-400 text-lg">{userData.name}</p>
     </div>
   )
 }
