@@ -2,7 +2,7 @@ import fetch from 'cross-fetch';
 var url = window.location.search
 const urlParams = new URLSearchParams(url);
 const code = urlParams.get('code')
-import Blockly from 'blockly';
+import Blockly, { FieldLabelSerializable } from 'blockly';
 import base64 from 'base-64';
 import Swal from "sweetalert2";
 
@@ -78,18 +78,19 @@ if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
 //}
 
 function push() {
+  if (!hasRepoBeenSelected()) return
   var userDataString = localStorage.getItem("userData")
   var userData = JSON.parse(userDataString)
-  var xmlDom = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace())
-  var xml = Blockly.Xml.domToPrettyText(xmlDom)
+  var jsonData = Blockly.serialization.workspaces.save(Blockly.getMainWorkspace())
 
-  var encodedContent = base64.encode(xml)
-
-  // Encode the file content as a base64 string
-
+  var encodedContent = base64.encode(JSON.stringify(jsonData))
+  var body = {
+    message: 'Updated file via S4D',
+    content: encodedContent
+  }
 
   // Get the SHA of the file
-  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.xml?timestamp=${Date.now()}`, {
+  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
       headers: {
         Authorization: `token ${localStorage.getItem("accessToken")}`
       }
@@ -97,20 +98,15 @@ function push() {
     .then(response => response.json())
     .then(fileData => {
       const sha = fileData.sha;
-      console.log(sha)
-      // Send a PUT request to update the file
-      fetch(fileData.url, {
+      console.log(fileData.url)
+      if (fileData.url) body.sha = sha
+      fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `token ${localStorage.getItem("accessToken")}`
           },
-          body: JSON.stringify({
-            message: 'Updated file via S4D',
-            content: encodedContent,
-            sha: sha
-
-          })
+          body: JSON.stringify(body)
         })
         .then(response => {
           if (response.ok) {
@@ -136,20 +132,39 @@ function push() {
     });
 }
 
+
 function pull() {
+  if (!hasRepoBeenSelected()) return
   var userDataString = localStorage.getItem("userData")
   console.log(userDataString)
   var userData = JSON.parse(userDataString)
-  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.xml?timestamp=${Date.now()}`, {
+  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
       headers: {
         Authorization: `token ${localStorage.getItem("accessToken")}`
       }
     }).then(res => res.json())
     .then(json => {
-      var xml = base64.decode(json.content)
+      console.log(json)
+      if (json.message) {
+        if (json.message == "Not Found") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            html: "<p>blocks.json not found in Repo.</p></br> <p>Please make sure you have selected the right Repo or push to create the file.</p>"
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: json.message
+          })
+        }
+        return
+      }
+      var json = base64.decode(json.content)
+      var jsonWorkspace = JSON.parse(json)
       Blockly.getMainWorkspace().clear()
-      let xmlDom = Blockly.utils.xml.textToDom(xml);
-      Blockly.Xml.domToWorkspace(xmlDom, Blockly.getMainWorkspace());
+      Blockly.serialization.workspaces.load(jsonWorkspace, Blockly.getMainWorkspace())
     })
 }
 
@@ -191,6 +206,17 @@ function oauth() {
     window.location = "https://github.com/login/oauth/authorize?scope=repo&client_id=bf929a64f389bd8aa375"
   } else {
     window.location = "https://github.com/login/oauth/authorize?scope=repo&client_id=b6d2e4d50218cbda081b"
+  }
+}
+
+function hasRepoBeenSelected() {
+  if (!localStorage.getItem("repo")) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      html: "Please select a repo."
+    })
+    return false
   }
 }
 
