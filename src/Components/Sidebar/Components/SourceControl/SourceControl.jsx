@@ -1,5 +1,5 @@
 import React, {useRef} from 'react'
-import {pull, push, selectRepo} from "../../../../sourceControl"
+import {pull, push, selectRepo, selectBranch} from "../../../../sourceControl"
 export default function SourceControl() {
   return (
     <div>
@@ -10,6 +10,8 @@ export default function SourceControl() {
       <button onClick={push}>Push</button>
       <br/>
       <button onClick={selectRepo}>Select Repo</button>
+      <br/>
+      <button onClick={selectBranch}>Select Branch</button>
       </div>
     </div>
   )
