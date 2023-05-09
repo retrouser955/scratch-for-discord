@@ -193,6 +193,7 @@ function selectRepo() {
         inputPlaceholder: 'Select a Option',
         showCancelButton: true,
       }).then(async (result) => {
+        if (!result.value) return
         localStorage.setItem("repo", result.value)
         Swal.fire({
           title: `Succesfully Selected ${result.value}!`,
