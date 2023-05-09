@@ -78,19 +78,24 @@ if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
 //}
 
 function push() {
+  console.log(hasRepoBeenSelected())
   if (!hasRepoBeenSelected()) return
+  console.log("ya")
   var userDataString = localStorage.getItem("userData")
   var userData = JSON.parse(userDataString)
   var jsonData = Blockly.serialization.workspaces.save(Blockly.getMainWorkspace())
-
   var encodedContent = base64.encode(JSON.stringify(jsonData))
+  var branch = ""
   var body = {
     message: 'Updated file via S4D',
     content: encodedContent
   }
-
+  if (localStorage.getItem("branch")) {
+    body.branch = localStorage.getItem("branch")
+    branch = `&ref=${localStorage.getItem("branch")}`
+  }
   // Get the SHA of the file
-  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
+  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}${branch}`, {
       headers: {
         Authorization: `token ${localStorage.getItem("accessToken")}`
       }
@@ -98,7 +103,7 @@ function push() {
     .then(response => response.json())
     .then(fileData => {
       const sha = fileData.sha;
-      console.log(fileData.url)
+      console.log(fileData)
       if (fileData.url) body.sha = sha
       fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
           method: 'PUT',
@@ -134,11 +139,16 @@ function push() {
 
 
 function pull() {
+  console.log("ya")
   if (!hasRepoBeenSelected()) return
   var userDataString = localStorage.getItem("userData")
   console.log(userDataString)
   var userData = JSON.parse(userDataString)
-  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
+  var branch = ""
+  if (localStorage.getItem("branch")) {
+    branch = `&ref=${localStorage.getItem("branch")}`
+  }
+  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}${branch}`, {
       headers: {
         Authorization: `token ${localStorage.getItem("accessToken")}`
       }
@@ -211,7 +221,9 @@ function oauth() {
 }
 
 function hasRepoBeenSelected() {
+  console.log("ran")
   if (!localStorage.getItem("repo")) {
+    console.log("no repo")
     Swal.fire({
       icon: 'error',
       title: 'Error',
@@ -219,11 +231,49 @@ function hasRepoBeenSelected() {
     })
     return false
   }
+  return true
+}
+
+function selectBranch() {
+  var selectBranch = {}
+  var userDataString = localStorage.getItem("userData")
+  var userData = JSON.parse(userDataString)
+  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/branches`, {
+      headers: {
+        Authorization: `token ${localStorage.getItem("accessToken")}`
+      }
+    })
+    .then(res => res.json())
+    .then(json => {
+      console.log(json)
+      json.forEach((ele) => {
+        var name = ele.name
+        console.log(name)
+        var newObj = {
+          [name]: ele.name
+        }
+        Object.assign(selectBranch, newObj)
+      });
+      Swal.fire({
+        title: "Branch Selection",
+        input: 'select',
+        inputOptions: selectBranch,
+        inputPlaceholder: 'Select a Option',
+        showCancelButton: true,
+      }).then(async (result) => {
+        if (!result.value) return
+        localStorage.setItem("branch", result.value)
+        Swal.fire({
+          title: `Succesfully Selected ${result.value}!`,
+        })
+      })
+    })
 }
 
 export {
   push,
   pull,
   selectRepo,
-  oauth
+  oauth,
+  selectBranch
 }
