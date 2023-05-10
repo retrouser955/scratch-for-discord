@@ -2,11 +2,11 @@ import Blockly from "blockly"
 import { javascriptGenerator } from 'blockly/javascript'
 
 export function generateMainFileContent() {
-    const { index } = localStorage.getItem("workspace")
+    const { index } = JSON.parse(localStorage.getItem("workspace"))
 
     const headlessWorkspace = new Blockly.Workspace()
 
-    Blockly.serialization.workspaces.load(JSON.parse(index), headlessWorkspace)
+    Blockly.serialization.workspaces.load(index, headlessWorkspace)
 
     const javascriptCode = javascriptGenerator.workspaceToCode(headlessWorkspace)
 
@@ -28,14 +28,14 @@ export function generateMainFileContent() {
 }
 
 export function generateCommandContent() {
-    const { commands } = localStorage.getItem('workspace')
+    const { commands } = JSON.parse(localStorage.getItem('workspace'))
 
     const headless = new Blockly.Workspace()
 
     const returnCmd = {}
 
     for(const command in commands) {
-        Blockly.serialization.workspaces.load(JSON.parse(commands[command], headless))
+        Blockly.serialization.workspaces.load(commands[command], headless)
 
         const code =
             `const Discord = require('discord.js')
