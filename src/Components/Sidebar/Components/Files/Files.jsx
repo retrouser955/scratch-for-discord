@@ -5,6 +5,7 @@ import { backUpFilesToLocal, loadFilesFromLocal } from '../../../../helpers/File
 import Swal from 'sweetalert2'
 import { AiFillFileAdd } from 'react-icons/ai'
 import { BsFillTrash3Fill } from "react-icons/bs"
+import { switchFiles } from "../../../../helpers/fileLoader.js"
 
 function Folder({ name }) {
   return <>
@@ -20,26 +21,32 @@ function Folder({ name }) {
 function CommandFile({ name, reload, reloader }) {
   return <>
     <div className="w-[95%] group ml-[5%] font-bold select-none pl-2 hover:border-2 hover:border-white transition-all flex h-7 items-center">
-      <div className="h-[70%] mr-1">
-        <SiJavascript className="w-full h-full text-yellow-500" />
+      <div className="flex items-center w-[90%]" onClick={() => switchFiles(name, reload, reloader, false, true)}>
+        <div className="h-[70%] mr-1">
+          <SiJavascript className="w-full h-full text-yellow-500" />
+        </div>
+        {name}.js
       </div>
-      {name}.js
-      <div className="h-[60%] hidden group-hover:block ml-auto mr-2">
+      <div className="h-[60%] w-[10%] hidden group-hover:block ml-auto mr-2">
         <BsFillTrash3Fill className="text-red-600 cursor-pointer" onClick={() => {
+          if (name === window.currentFile) {
+            switchFiles('index', reload, reloader, true, false)
+          }
+
           delete window.files.commands[name]
 
-          reload(!reloader)
-
           backUpFilesToLocal()
+
+          reload(!reloader)
         }} />
       </div>
     </div>
   </>
 }
 
-function JavaScriptMainFile({ name }) {
+function JavaScriptMainFile({ name, reload, reloader }) {
   return <>
-    <div className="select-none px-2 w-full font-bold hover:border-2 hover:border-white transition-all flex h-7 items-center">
+    <div className="select-none px-2 w-full font-bold hover:border-2 hover:border-white transition-all flex h-7 items-center" onClick={() => switchFiles("index", reload, reloader, false, true)}>
       <div className="h-[70%] mr-1">
         <SiJavascript className="w-full h-full text-yellow-500" />
       </div>
@@ -57,7 +64,7 @@ export default function Files() {
 
     const commandFiles = []
 
-    for(const command in window.files.commands) {
+    for (const command in window.files.commands) {
       commandFiles.push(<CommandFile reload={reloadDom} name={command} reloader={reloadReader} />)
     }
 
@@ -69,7 +76,7 @@ export default function Files() {
       <b>Files</b>
 
       <div className="w-full mt-3">
-        <div className="w-full flex pl-2 h-7">
+        <div className="w-full flex items-center pl-2 h-7">
           <AiFillFileAdd className="h-full cursor-pointer hover:text-gray-500 transition-all" onClick={async () => {
             const { value: formValues } = await Swal.fire({
               title: 'Name your file',
@@ -94,11 +101,13 @@ export default function Files() {
 
             backUpFilesToLocal()
           }} />
+
+          <p className="ml-3"><span className="font-bold">{window.currentFile}.js</span></p>
         </div>
 
         <Folder name="commands" />
         {files}
-        <JavaScriptMainFile name="index" />
+        <JavaScriptMainFile name="index" reload={reloadDom} reloader={reloadReader} />
       </div>
     </div>
   )
