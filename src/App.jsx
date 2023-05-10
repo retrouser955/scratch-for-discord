@@ -11,6 +11,13 @@ function App() {
   const [isHidden, setIsHidden] = useState(false)
 
   useEffect(() => {
+    const workspace = localStorage.getItem('workspace')
+
+    if(!workspace) localStorage.setItem('workspace', JSON.stringify({
+      index: {},
+      commands: {}
+    }))
+
     loadFilesFromLocal()
 
     window.currentFile = "index"
