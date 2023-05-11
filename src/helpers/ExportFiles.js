@@ -67,7 +67,7 @@ export async function downloadZip() {
     const link = document.createElement('a');
     link.href = URL.createObjectURL(content);
     // make this workspace name when feature comes out
-    link.download = 'files.zip';
+    link.download = `${localStorage.getItem("projectName") || "Untitled Project"}`
     link.click();
     URL.revokeObjectURL(link.href);
 
