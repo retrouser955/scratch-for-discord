@@ -40,12 +40,22 @@ function CommandFile({ name, reload, reloader }) {
           if (name === window.currentFile) {
             switchFiles('index', reload, reloader, true, false)
           }
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff0000',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              delete window.files.commands[name]
 
-          delete window.files.commands[name]
-
-          backUpFilesToLocal()
-
-          reload(!reloader)
+              backUpFilesToLocal()
+              reload(!reloader)
+            }
+          })
         }} />
       </div>
     </div>
