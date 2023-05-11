@@ -3,17 +3,25 @@ import { SiJavascript } from "react-icons/si"
 import { AiFillFolder } from "react-icons/ai"
 import { backUpFilesToLocal, loadFilesFromLocal } from '../../../../helpers/FileTools'
 import Swal from 'sweetalert2'
-import { AiFillFileAdd } from 'react-icons/ai'
+import { AiFillFileAdd, AiOutlinePlus } from 'react-icons/ai'
 import { BsFillTrash3Fill } from "react-icons/bs"
 import { switchFiles } from "../../../../helpers/fileLoader.js"
 
-function Folder({ name }) {
+function Folder({ name, onClickNew }) {
   return <>
-    <div className="select-none font-bold pl-2 w-full hover:border-2 hover:border-white transition-all flex h-7 items-center">
-      <div className="h-[70%] mr-1">
-        <AiFillFolder className="w-full h-full" />
+    <div className="select-none font-bold pl-2 w-full hover:border-2 hover:border-white transition-all flex h-7 items-center justify-between">
+      <div className="flex direction-row items-center">
+        <div className="h-[70%] mr-1">
+          <AiFillFolder />
+        </div>
+        {name}
       </div>
-      {name}
+      {onClickNew ? (
+        <button onClick={onClickNew} className="excempt-button">
+          <AiOutlinePlus />
+        </button>
+      ) : null
+      }
     </div>
   </>
 }
@@ -71,41 +79,43 @@ export default function Files() {
     setFiles(commandFiles)
   }, [reloadReader])
 
+  async function createNewFile() {
+    const { value: formValues } = await Swal.fire({
+      title: 'Name your file',
+      html: '<input id="swal-input1" class="swal2-input">',
+      focusConfirm: false,
+      preConfirm: () => {
+        return [
+          document.getElementById('swal-input1').value
+        ]
+      }
+    })
+
+    loadFilesFromLocal()
+
+    window.files.commands[formValues] = {}
+
+    const commandDupe = [...files]
+
+    commandDupe.push(<CommandFile reload={reloadDom} reloader={reloadReader} name={formValues} />)
+
+    setFiles(commandDupe)
+
+    backUpFilesToLocal()
+  }
+
   return (
     <div>
       <b>Files</b>
 
       <div className="w-full mt-3">
         <div className="w-full flex items-center pl-2 h-7">
-          <AiFillFileAdd className="h-full cursor-pointer hover:text-gray-500 transition-all" onClick={async () => {
-            const { value: formValues } = await Swal.fire({
-              title: 'Name your file',
-              html: '<input id="swal-input1" class="swal2-input">',
-              focusConfirm: false,
-              preConfirm: () => {
-                return [
-                  document.getElementById('swal-input1').value
-                ]
-              }
-            })
-
-            loadFilesFromLocal()
-
-            window.files.commands[formValues] = {}
-
-            const commandDupe = [...files]
-
-            commandDupe.push(<CommandFile reload={reloadDom} reloader={reloadReader} name={formValues} />)
-
-            setFiles(commandDupe)
-
-            backUpFilesToLocal()
-          }} />
+          <AiFillFileAdd className="h-full cursor-pointer hover:text-gray-500 transition-all" onClick={createNewFile} />
 
           <p className="ml-3"><span className="font-bold">{window.currentFile}.js</span></p>
         </div>
 
-        <Folder name="commands" />
+        <Folder name="commands" onClickNew={createNewFile} />
         {files}
         <JavaScriptMainFile name="index" reload={reloadDom} reloader={reloadReader} />
       </div>
