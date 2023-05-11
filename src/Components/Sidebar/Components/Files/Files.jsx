@@ -82,15 +82,20 @@ export default function Files() {
   async function createNewFile() {
     const { value: formValues } = await Swal.fire({
       title: 'Name your file',
-      html: '<input id="swal-input1" class="swal2-input">',
+      html: '<input id="swal-input1" placeholder="command1" class="swal2-input">',
       focusConfirm: false,
+      showDenyButton: true,
       preConfirm: () => {
+        const value = document.getElementById('swal-input1').value   
+        if (!value.match(/[A-Za-z0-9]{3}/)) Swal.showValidationMessage('File name must be 3 characters long and can only contain letters and numbers!')
+        if (window.files.commands[value]) Swal.showValidationMessage('This file already exists!')
+        if (!value) Swal.showValidationMessage('You need to write something!')
         return [
-          document.getElementById('swal-input1').value
+          value
         ]
       }
     })
-
+    if (!formValues) return
     loadFilesFromLocal()
 
     window.files.commands[formValues] = {}
