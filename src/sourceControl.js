@@ -251,6 +251,7 @@ function selectRepo() {
       }).then(async (result) => {
         if (!result.value) return
         localStorage.setItem("repo", result.value)
+        window.dispatchEvent( new Event('storage') )
         Swal.fire({
           title: `Succesfully Selected ${result.value}!`,
         })
@@ -324,6 +325,7 @@ function selectBranch() {
       }).then(async (result) => {
         if (!result.value) return
         localStorage.setItem("branch", result.value)
+        window.dispatchEvent( new Event('storage') )
         Swal.fire({
           title: `Succesfully Selected ${result.value}!`,
         })
