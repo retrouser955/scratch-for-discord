@@ -295,6 +295,7 @@ function hasBranchBeenSelected() {
 }
 
 function selectBranch() {
+  if (!hasRepoBeenSelected()) return
   var selectBranch = {}
   var userDataString = localStorage.getItem("userData")
   var userData = JSON.parse(userDataString)
