@@ -4,7 +4,7 @@ import { AiFillFolder } from "react-icons/ai"
 import { backUpFilesToLocal, loadFilesFromLocal } from '../../../../helpers/FileTools'
 import Swal from 'sweetalert2'
 import { AiFillFileAdd, AiOutlinePlus } from 'react-icons/ai'
-import { BsFillTrash3Fill } from "react-icons/bs"
+import { BsFillTrash3Fill, BsFillPencilFill } from "react-icons/bs"
 import { switchFiles } from "../../../../helpers/fileLoader.js"
 
 function Folder({ name, onClickNew }) {
@@ -119,15 +119,53 @@ export default function Files() {
     backUpFilesToLocal()
   }
 
+  function ProjectName() {
+    const [name, setProjectName] = useState(localStorage.getItem("projectName") || 'Untitled Project');
+  
+    useEffect(() => {
+      window.addEventListener('storage', () => {
+        setProjectName(localStorage.getItem("projectName") || 'Untitled Project');
+      })
+    }, []);
+    return (
+    <>
+    <div className="select-none font-bold pl-2 w-full transition-all flex h-7 items-center justify-between">
+      <div className="flex direction-row items-center overflow-auto">
+        {name}
+      </div>
+        <button onClick={changeProjectName} className="excempt-button">
+          <BsFillPencilFill className="pr-1"/>
+        </button>
+
+    </div>
+    </>
+      )
+  }
+
+ async function changeProjectName() {
+      await Swal.fire({
+      title: 'Name your project',
+      html: '<input id="swal-input1" class="swal2-input">',
+      focusConfirm: false,
+      preConfirm: () => {
+      let projectName = document.getElementById('swal-input1').value
+      if (!projectName) return
+      localStorage.setItem("projectName", projectName)
+      window.dispatchEvent( new Event('storage') )
+      Swal.fire({
+        title: `Succesfully Set Project Name to ${projectName}!`,
+      })
+      }
+    })
+  }
+
   return (
     <div>
       <b>Files</b>
 
       <div className="w-full mt-3">
         <div className="w-full flex items-center pl-2 h-7">
-          <AiFillFileAdd className="h-full cursor-pointer hover:text-gray-500 transition-all" onClick={createNewFile} />
-
-          <p className="ml-3"><span className="font-bold">{window.currentFile}.js</span></p>
+          <ProjectName className="h-full cursor-pointer hover:text-gray-500 transition-all pb-5" />
         </div>
 
         <Folder name="commands" onClickNew={createNewFile} />
