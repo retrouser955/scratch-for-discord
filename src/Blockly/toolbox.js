@@ -102,7 +102,12 @@ const toolbox = {
                 {
                     "type": "eventClientConnected",
                     "kind": "block"
+                },
+                {
+                    "type": "botLogin",
+                    "kind": "block"
                 }
+
             ]
         }
     ]

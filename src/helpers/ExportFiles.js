@@ -28,7 +28,7 @@ export function generateMainFileContent() {
 }
 
 export function generateCommandContent() {
-    const { commands } = JSON.parse(localStorage.getItem('workspace'))
+const { commands } = JSON.parse(localStorage.getItem('workspace'))
 
     const headless = new Blockly.Workspace()
 
