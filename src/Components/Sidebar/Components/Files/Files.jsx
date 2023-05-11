@@ -20,7 +20,7 @@ function Folder({ name }) {
 
 function CommandFile({ name, reload, reloader }) {
   return <>
-    <div className="w-[95%] group ml-[5%] font-bold select-none pl-2 hover:border-2 hover:border-white transition-all flex h-7 items-center">
+    <div className={`w-[95%] group ml-[5%] font-bold select-none pl-2 ${name === window.currentFile ? "border-2" : "hover:border-2"} hover:border-white transition-all flex h-7 items-center`}>
       <div className="flex items-center w-[90%]" onClick={() => switchFiles(name, reload, reloader, false, true)}>
         <div className="h-[70%] mr-1">
           <SiJavascript className="w-full h-full text-yellow-500" />
@@ -46,7 +46,7 @@ function CommandFile({ name, reload, reloader }) {
 
 function JavaScriptMainFile({ name, reload, reloader }) {
   return <>
-    <div className="select-none px-2 w-full font-bold hover:border-2 hover:border-white transition-all flex h-7 items-center" onClick={() => switchFiles("index", reload, reloader, false, true)}>
+    <div className={`select-none px-2 w-full font-bold hover:border-white ${name === window.currentFile ? "border-2" : "hover:border-2"} transition-all flex h-7 items-center`} onClick={() => switchFiles("index", reload, reloader, false, true)}>
       <div className="h-[70%] mr-1">
         <SiJavascript className="w-full h-full text-yellow-500" />
       </div>

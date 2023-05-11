@@ -2,8 +2,8 @@ import Blockly from "blockly"
 import { javascriptGenerator } from 'blockly/javascript'
 
 export function generateMainFileContent() {
-    var index = JSON.parse(localStorage.getItem("workspace")).index
-    console.log(index)
+    const { index } = JSON.parse(localStorage.getItem("workspace"))
+
     const headlessWorkspace = new Blockly.Workspace()
 
     Blockly.serialization.workspaces.load(index, headlessWorkspace)
@@ -28,7 +28,8 @@ export function generateMainFileContent() {
 }
 
 export function generateCommandContent() {
-    var commands = JSON.parse(localStorage.getItem("workspace")).commands
+const { commands } = JSON.parse(localStorage.getItem('workspace'))
+
     const headless = new Blockly.Workspace()
 
     const returnCmd = {}

@@ -9,8 +9,6 @@ export function switchFiles(fileName, reload, reloader, dontReloadDom, backup) {
 
     const currentJSON = Blockly.serialization.workspaces.save(Blockly.getMainWorkspace())
 
-    console.log(currentJSON)
-
     if(main === "index") {
         window.files.index = currentJSON
     } else {
