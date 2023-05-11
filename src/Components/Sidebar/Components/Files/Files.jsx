@@ -9,7 +9,7 @@ import { switchFiles } from "../../../../helpers/fileLoader.js"
 
 function Folder({ name, onClickNew }) {
   return <>
-    <div className="select-none font-bold pl-2 w-full hover:border-2 hover:border-white transition-all flex h-7 items-center justify-between">
+    <div className="select-none font-bold pl-2 w-full border-2 border-transparent hover:border-white transition-all flex h-7 items-center justify-between">
       <div className="flex direction-row items-center">
         <div className="h-[70%] mr-1">
           <AiFillFolder />
@@ -28,7 +28,7 @@ function Folder({ name, onClickNew }) {
 
 function CommandFile({ name, reload, reloader }) {
   return <>
-    <div className={`w-[95%] group ml-[5%] font-bold select-none pl-2 ${name === window.currentFile ? "border-2" : "hover:border-2"} hover:border-white transition-all flex h-7 items-center`}>
+    <div className={`w-[95%] group ml-[5%] select-none pl-2 border-2 ${name === window.currentFile ? "border-white" : "border-transparent"} hover:border-white transition-all flex h-7 items-center`}>
       <div className="flex items-center w-[90%]" onClick={() => switchFiles(name, reload, reloader, false, true)}>
         <div className="h-[70%] mr-1">
           <SiJavascript className="w-full h-full text-yellow-500" />
@@ -64,7 +64,7 @@ function CommandFile({ name, reload, reloader }) {
 
 function JavaScriptMainFile({ name, reload, reloader }) {
   return <>
-    <div className={`select-none px-2 w-full font-bold hover:border-white ${name === window.currentFile ? "border-2" : "hover:border-2"} transition-all flex h-7 items-center`} onClick={() => switchFiles("index", reload, reloader, false, true)}>
+    <div className={`select-none px-2 w-full hover:border-white border-2 ${name === window.currentFile ? "border-white" : "border-transparent"} transition-all flex h-7 items-center`} onClick={() => switchFiles("index", reload, reloader, false, true)}>
       <div className="h-[70%] mr-1">
         <SiJavascript className="w-full h-full text-yellow-500" />
       </div>
