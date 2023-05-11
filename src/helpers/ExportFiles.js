@@ -1,4 +1,5 @@
 import Blockly from "blockly"
+import JSZip from 'jszip'
 import { javascriptGenerator } from 'blockly/javascript'
 
 export function generateMainFileContent() {
@@ -51,4 +52,23 @@ const { commands } = JSON.parse(localStorage.getItem('workspace'))
     }
 
     return returnCmd
+}
+
+export async function downloadZip() {
+    var commands = generateCommandContent()
+    const zip = new JSZip();
+    zip.file('index.js', generateMainFileContent());
+    zip.file('blocks.json', localStorage.getItem("workspace"));
+    const folder = zip.folder('commands');
+    Object.entries(commands).forEach(([key, value]) => {
+        folder.file(`${key}.js`, value);
+      });
+    const content = await zip.generateAsync({ type: 'blob' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    // make this workspace name when feature comes out
+    link.download = 'files.zip';
+    link.click();
+    URL.revokeObjectURL(link.href);
+
 }

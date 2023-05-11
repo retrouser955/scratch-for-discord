@@ -1,5 +1,5 @@
 import React from 'react'
-import { generateCommandContent, generateMainFileContent } from '../../helpers/ExportFiles'
+import { generateCommandContent, generateMainFileContent, downloadZip } from '../../helpers/ExportFiles'
 
 export default function Navbar() {
   return (
@@ -10,6 +10,7 @@ export default function Navbar() {
         console.log(generateMainFileContent())
         console.log(generateCommandContent())
       }}>Generate Code</button>
+      <button className="ml-5 h-10 text-white flex items-center my-auto" onClick={downloadZip}>Download Zip</button>
     </div>
   )
 }
