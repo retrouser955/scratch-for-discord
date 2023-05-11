@@ -6,6 +6,7 @@ import Blockly, { FieldLabelSerializable } from 'blockly';
 import base64 from 'base-64';
 import Swal from "sweetalert2";
 import {generateMainFileContent, generateCommandContent} from "./helpers/ExportFiles"
+import { loadFilesFromLocal } from './helpers/FileTools';
 
 if (code) {
   var changeUrl = new URL(document.location.href);
@@ -78,6 +79,8 @@ if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
 //}
 
 async function push() {
+  if (!hasRepoBeenSelected()) return
+  if (!hasBranchBeenSelected()) return
   var commands = generateCommandContent()
   var userDataString = localStorage.getItem("userData")
   var userData = JSON.parse(userDataString)
@@ -159,8 +162,18 @@ const response4 = await fetch(`https://api.github.com/repos/${userData.login}/${
 
 if (response4.status === 200) {
   console.log('Folder updated successfully!');
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: "Successfully updated files!"
+  })
 } else {
   console.log('Failed to update the folder.');
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: "Failed to update the folder"
+  })
 }
 }
 
@@ -168,6 +181,7 @@ if (response4.status === 200) {
 function pull() {
   console.log("ya")
   if (!hasRepoBeenSelected()) return
+  if (!hasBranchBeenSelected()) return
   var userDataString = localStorage.getItem("userData")
   console.log(userDataString)
   var userData = JSON.parse(userDataString)
@@ -199,9 +213,14 @@ function pull() {
         return
       }
       var json = base64.decode(json.content)
-      var jsonWorkspace = JSON.parse(json)
-      Blockly.getMainWorkspace().clear()
-      Blockly.serialization.workspaces.load(jsonWorkspace, Blockly.getMainWorkspace())
+      localStorage.setItem("workspace", json)
+      loadFilesFromLocal()
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "Successfully loaded files!"
+      })
+      
     })
 }
 
@@ -255,6 +274,20 @@ function hasRepoBeenSelected() {
       icon: 'error',
       title: 'Error',
       html: "Please select a repo."
+    })
+    return false
+  }
+  return true
+}
+
+function hasBranchBeenSelected() {
+  console.log("ran")
+  if (!localStorage.getItem("branch")) {
+    console.log("no repo")
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      html: "Please select a branch."
     })
     return false
   }
