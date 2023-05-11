@@ -5,7 +5,7 @@ const code = urlParams.get('code')
 import Blockly, { FieldLabelSerializable } from 'blockly';
 import base64 from 'base-64';
 import Swal from "sweetalert2";
-
+import {generateMainFileContent, generateCommandContent} from "./helpers/ExportFiles"
 
 if (code) {
   var changeUrl = new URL(document.location.href);
@@ -77,64 +77,91 @@ if (window.location.hostname == 'scratch-for-discord-nine.vercel.app') {
 //  }
 //}
 
-function push() {
-  console.log(hasRepoBeenSelected())
-  if (!hasRepoBeenSelected()) return
-  console.log("ya")
+async function push() {
+  var commands = generateCommandContent()
   var userDataString = localStorage.getItem("userData")
   var userData = JSON.parse(userDataString)
-  var jsonData = Blockly.serialization.workspaces.save(Blockly.getMainWorkspace())
-  var encodedContent = base64.encode(JSON.stringify(jsonData))
-  var branch = ""
-  var body = {
-    message: 'Updated file via S4D',
-    content: encodedContent
+  var main = generateMainFileContent()
+  var blocks = localStorage.getItem("workspace")
+  var branch = localStorage.getItem("branch");
+  var accessToken = localStorage.getItem("accessToken")
+  var tree = [
+  {
+    path: `index.js`,
+    mode: '100644',
+    type: 'blob',
+    content: main
+  },
+  {
+    path: `blocks.json`,
+    mode: '100644',
+    type: 'blob',
+    content: blocks
   }
-  if (localStorage.getItem("branch")) {
-    body.branch = localStorage.getItem("branch")
-    branch = `&ref=${localStorage.getItem("branch")}`
-  }
-  // Get the SHA of the file
-  fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}${branch}`, {
-      headers: {
-        Authorization: `token ${localStorage.getItem("accessToken")}`
-      }
-    })
-    .then(response => response.json())
-    .then(fileData => {
-      const sha = fileData.sha;
-      console.log(fileData)
-      if (fileData.url) body.sha = sha
-      fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/contents/blocks.json?timestamp=${Date.now()}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `token ${localStorage.getItem("accessToken")}`
-          },
-          body: JSON.stringify(body)
-        })
-        .then(response => {
-          if (response.ok) {
-            console.log('File updated successfully.');
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: "File updated successfully."
-            })
-          } else {
-            response.json().then(resJson => {
-              console.log(resJson)
-              console.log(resJson.message)
-              Swal.fire({
-                icon: 'error',
-                title: 'Error...',
-                text: resJson.message
-              })
-            })
-          }
-        })
-        .catch(error => console.log(error));
-    });
+  ]
+  Object.entries(commands).forEach(([key, value]) => {
+    var obj = {
+        path: `commands/${key}.js`,
+        mode: '100644',
+        type: 'blob',
+        content: value
+    }
+    tree.push(obj)
+  });
+  const response1 = await fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/git/trees`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken}`
+  },
+  body: JSON.stringify({
+    "tree": tree,
+    "repo": localStorage.getItem("repo"),
+    "owner": userData.login
+  })
+});
+const data1 = await response1.json();
+console.log(data1)
+const newTreeSha = data1.sha;
+const response2 = await fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/branches/${branch}`);
+const data2 = await response2.json();
+console.log(data2)
+const parentCommitSha = data2.commit.sha;
+
+const response3 = await fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/git/commits`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken}`
+  },
+  body: JSON.stringify({
+    message: "Updated via S4D",
+    tree: newTreeSha,
+    parents: [parentCommitSha]
+  })
+});
+
+const data3 = await response3.json();
+console.log(data3)
+const newCommitSha = data3.sha;
+
+const response4 = await fetch(`https://api.github.com/repos/${userData.login}/${localStorage.getItem("repo")}/git/refs/heads/${branch}`, {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken}`
+  },
+  body: JSON.stringify({
+    sha: newCommitSha,
+    force: false
+  })
+});
+
+if (response4.status === 200) {
+  console.log('Folder updated successfully!');
+} else {
+  console.log('Failed to update the folder.');
+}
 }
 
 

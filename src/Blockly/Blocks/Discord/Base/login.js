@@ -26,7 +26,7 @@ Blockly.Blocks[blockName] = {
 };
 
 javascriptGenerator[blockName] = function(block) {
-    const value = javascriptGenerator.valueToCode(block, "TOKEN", Blockly.JavaScript.ORDER_ATOMIC);
+    const value = javascriptGenerator.valueToCode(block, "TOKEN", javascriptGenerator.ORDER_ATOMIC);
     const code = `s4d.client.login(${value}).catch((e) => { 
     const tokenInvalid = true;
     const tokenError = e;

@@ -4,7 +4,7 @@ export default function SourceControl() {
   return (
     <div>
       <b>Source Control</b>
-      <div id="sc-main" class="nav-ele" >
+      <div id="sc-main" className="nav-ele" >
       <button onClick={pull}>Pull</button>
       <br/>
       <button onClick={push}>Push</button>
