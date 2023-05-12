@@ -8,7 +8,7 @@ import { loadFilesFromLocal } from './helpers/FileTools'
 import Blockly from "blockly"
 
 function App() {
-  const [isHidden, setIsHidden] = useState(false)
+  const [isHidden, setIsHidden] = useState(true)
 
   useEffect(() => {
     const workspace = localStorage.getItem('workspace')
