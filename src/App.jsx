@@ -9,16 +9,6 @@ import Blockly from "blockly"
 
 function App() {
   const [isHidden, setIsHidden] = useState(true)
-  
-  window.onload = (() => {
-  if (window.location.host == "s4d.vercel.app") {
-    let arr = []
-    let num = 0
-    while (true) {
-      arr.push(num)
-      num++
-}
-})
 
   useEffect(() => {
     const workspace = localStorage.getItem('workspace')
