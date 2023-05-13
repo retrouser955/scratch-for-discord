@@ -13,16 +13,29 @@ button:not(.excempt-button) {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  border-color: transparent;
 }
 
-button:hover {
+button:hover,#download-button:hover {
   border-color: #646cff;
+}
+#download-button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  border-color: transparent;
+  padding: 0.4em;
+  margin-left: 1em;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  /* outline: 4px auto -webkit-focus-ring-color; */
 }
-
 .nav-ele {
   margin-top: 10px;
   display: grid;
