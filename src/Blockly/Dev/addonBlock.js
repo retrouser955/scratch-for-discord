@@ -13,7 +13,22 @@ axios.get("https://addon.url/blocks/all").then(async (res) => {
             }
         }
 
-        // TODO: Generate Code for imported blocks
-        javascriptGenerator[name] = function (block) {}
+        javascriptGenerator[name] = async function (blockData) {
+            const { data } = await axios.get(`https://addon.url/blocks/data/${name}`)
+
+            let requestData = {}
+
+            for(const arg of data.args0) {
+                if(arg.type === "input_dummy") continue
+
+                requestData[arg.name] = javascriptGenerator.valueToCode(block, arg.name, javascriptGenerator.ORDER_ATOMIC)
+            }
+
+            const code = await axios.get(`https://addon.url/code/${name}`, {
+                params: requestData
+            })
+
+            return code
+        }
     }
 })
