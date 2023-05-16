@@ -92,7 +92,6 @@ export default function Files() {
   }, [reloadReader])
 
   async function createNewFile() {
-    toggleCommand()
     const { value: formValues } = await Swal.fire({
       title: 'Name your new file',
       html: '<input id="swal-input1" placeholder="command1" class="swal2-input">',
