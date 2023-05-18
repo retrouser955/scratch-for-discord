@@ -15,6 +15,7 @@ export default function Sidebar({ setIsHidden, hidden }) {
     const [activeTab, setActiveTab] = useState(0);
     useEffect(() => {
         setTab(0)
+        setIsHidden(false)
     }, [])
     const switchTab = (index) => {
       if (index === activeTab || hidden === false) {

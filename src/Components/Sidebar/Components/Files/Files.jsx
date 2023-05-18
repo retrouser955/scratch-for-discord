@@ -7,6 +7,8 @@ import { AiFillFileAdd, AiOutlinePlus } from 'react-icons/ai'
 import { BsFillTrash3Fill, BsFillPencilFill } from "react-icons/bs"
 import { switchFiles } from "../../../../helpers/fileLoader.js"
 
+const nameRegex = /^(?!\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\|\*\?\\:<>/$"]*[^\.\|\*\?\\:<>/$"]+$/;
+
 function Folder({ name, onClickNew }) {
   return <>
     <div className="select-none font-bold pl-2 w-full border-2  rounded-md border-transparent transition-all flex h-7 items-center justify-between cursor-pointer">
@@ -91,15 +93,16 @@ export default function Files() {
 
   async function createNewFile() {
     const { value: formValues } = await Swal.fire({
-      title: 'Name your file',
+      title: 'Name your new file',
       html: '<input id="swal-input1" placeholder="command1" class="swal2-input">',
       focusConfirm: false,
       showDenyButton: true,
+      denyButtonText: `Cancel`,
       preConfirm: () => {
         const value = document.getElementById('swal-input1').value   
-        if (!value.match(/[A-Za-z0-9]{3}/)) Swal.showValidationMessage('File name must be 3 characters long and can only contain letters and numbers!')
-        if (window.files.commands[value]) Swal.showValidationMessage('This file already exists!')
-        if (!value) Swal.showValidationMessage('You need to write something!')
+        if (!value) return Swal.showValidationMessage('You need to write something!')
+        if (window.files.commands[value]) return Swal.showValidationMessage('This file already exists!')
+        if (!value.match(nameRegex)) return Swal.showValidationMessage('File name can´t start or end with a dot or include prohibited characters: |, *, ?, \, :, <, >, /, $, or "')
         return [
           value
         ]
@@ -148,9 +151,12 @@ export default function Files() {
       html: '<input id="swal-input1" placeholder="My s4d Project" class="swal2-input">',
       focusConfirm: false,
       showDenyButton: true,
+      denyButtonText: `Cancel`,
       preConfirm: () => {
+        Swal.showLoading()
       let projectName = document.getElementById('swal-input1').value
-      if (!projectName) return
+      if (!projectName) return Swal.showValidationMessage('You need to write something!')
+      if (!projectName.match(nameRegex)) return Swal.showValidationMessage('Project name can´t start or end with a dot or include prohibited characters: |, *, ?, \, :, <, >, /, $, or "')
       localStorage.setItem("projectName", projectName)
       window.dispatchEvent( new Event('storage') )
       }
