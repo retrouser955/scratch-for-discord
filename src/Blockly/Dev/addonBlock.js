@@ -1,6 +1,8 @@
-import { default as axios } from "axios"
+import syncFetch from "../../helpers/syncFetch"
 import Blockly from "blockly"
 import { javascriptGenerator } from "blockly/javascript"
+
+// TODO: remove the old system after new push from godslayerakp#3587
 
 axios.get("https://addon.url/blocks/all").then(async (res) => {
     for(const block in res.data) {
@@ -13,8 +15,8 @@ axios.get("https://addon.url/blocks/all").then(async (res) => {
             }
         }
 
-        javascriptGenerator[name] = async function (blockData) {
-            const { data } = await axios.get(`https://addon.url/blocks/data/${name}`)
+        javascriptGenerator[name] = function (blockData) {
+            const data = syncFetch(`https://addon.url/blocks/data/${name}`)
 
             let requestData = {}
 
@@ -24,9 +26,13 @@ axios.get("https://addon.url/blocks/all").then(async (res) => {
                 requestData[arg.name] = javascriptGenerator.valueToCode(block, arg.name, javascriptGenerator.ORDER_ATOMIC)
             }
 
-            const code = await axios.get(`https://addon.url/code/${name}`, {
-                params: requestData
-            })
+            let transportString = []
+
+            for(let token of Object.keys(requestData)) {
+                transportString.push(encodeURIComponent(`${token}=${requestData[token]}`))
+            }
+
+            const code = syncFetch(`https://addon.url/code/${name}?${transportString.join("&")}`)
 
             return code
         }
