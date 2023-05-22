@@ -45,6 +45,7 @@ export default function BlocklyWorkspace({ hidden }) {
         newWorkspace.addChangeListener(Blockly.Events.disableOrphans)
 
         isHidden.current = hidden ? "w-[97vw]" : "w-[85vw]"
+        newWorkspace.getToolbox().setVisible(!hidden)
     })
 
     return (
