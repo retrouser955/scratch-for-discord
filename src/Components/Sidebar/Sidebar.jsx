@@ -3,6 +3,7 @@ import { GoFileSubmodule } from "react-icons/go"
 import { RiAccountCircleFill } from "react-icons/ri"
 import { VscSourceControl } from "react-icons/vsc"
 import { BsArrowBarRight } from "react-icons/bs"
+import {IoSettingsSharp} from "react-icons/io5"
 import useSwitch from "./Components/Switcher/Swtich"
 
 function Bar({ className }) {
@@ -47,8 +48,11 @@ export default function Sidebar({ setIsHidden, hidden }) {
               className={`mx-auto ${activeTab === 1 && hidden === true ? "text-orange-500" : "text-white"} ${logged ? "block" : "hidden"} hover:text-orange-500 transition-all cursor-pointer`}
               onClick={() => switchTab(1)}
             />
+            <Bar />
+            <IoSettingsSharp size={25} className={`mx-auto ${activeTab === 3 && hidden === true ? "text-orange-500" : "text-white"} hover:text-orange-500 transition-all cursor-pointer`} onClick={() => switchTab(3)} />
             <Bar className={`${hidden ? "block" : "hidden"}`} />
             <BsArrowBarRight size={25} className={`${hidden ? "block" : "hidden"} mx-auto text-white hover:text-orange-500 transition-all cursor-pointer`} onClick={() => setIsHidden(!hidden)} />
+
           </div>
     
           <div className='text-white h-full w-full pl-[3vw] pt-[10vh]'>

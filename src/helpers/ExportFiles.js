@@ -54,21 +54,24 @@ const { commands } = JSON.parse(localStorage.getItem('workspace'))
     return returnCmd
 }
 
-export async function downloadZip() {
-    var commands = generateCommandContent()
+export async function downloadZip(main,cmds,json,workspace) {
     const zip = new JSZip();
-    zip.file('index.js', generateMainFileContent());
-    zip.file('blocks.json', localStorage.getItem("workspace"));
+if (main) zip.file('index.js', generateMainFileContent());
+if (json) //package.json
+if (workspace) zip.file('blocks.json', localStorage.getItem("workspace"));
+if (cmds) {
+    var commands = generateCommandContent()
     const folder = zip.folder('commands');
     Object.entries(commands).forEach(([key, value]) => {
         folder.file(`${key}.js`, value);
       });
+    }
+
     const content = await zip.generateAsync({ type: 'blob' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(content);
     // make this workspace name when feature comes out
-    link.download = `${localStorage.getItem("projectName") || "Untitled Project"}`
+    link.download = `${localStorage.getItem("projectName") || "Untitled Project"}.zip`
     link.click();
     URL.revokeObjectURL(link.href);
-
 }

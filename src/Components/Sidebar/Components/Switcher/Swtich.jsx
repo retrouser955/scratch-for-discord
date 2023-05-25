@@ -2,11 +2,14 @@ import { useState } from "react"
 import SourceControl from "../SourceControl/SourceControl"
 import Files from "../Files/Files"
 import Account from "../Account/Account"
+import Settings from "../Settings/Settings"
+
 
 const SOURCE_MATCHER = [
     <Files />,
     <SourceControl />,
-    <Account />
+    <Account />,
+    <Settings />
 ]
 
 export default function useSwitch() {
