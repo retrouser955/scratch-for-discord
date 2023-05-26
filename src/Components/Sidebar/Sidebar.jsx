@@ -5,7 +5,9 @@ import { VscSourceControl } from "react-icons/vsc"
 import { BsArrowBarRight } from "react-icons/bs"
 import {IoSettingsSharp} from "react-icons/io5"
 import useSwitch from "./Components/Switcher/Swtich"
-
+import {AiOutlineShop} from "react-icons/ai"
+import {BiEdit, BiLink} from "react-icons/bi"
+import {MdMiscellaneousServices} from "react-icons/md"
 function Bar({ className }) {
     if (!className) className = ""
         return <div className={`bg-white h-[2px] w-[80%] rounded-sm mx-auto my-2 ${className}`} />
@@ -50,6 +52,12 @@ export default function Sidebar({ setIsHidden, hidden }) {
             />
             <Bar />
             <IoSettingsSharp size={25} className={`mx-auto ${activeTab === 3 && hidden === true ? "text-orange-500" : "text-white"} hover:text-orange-500 transition-all cursor-pointer`} onClick={() => switchTab(3)} />
+            <Bar />
+            <AiOutlineShop size={25} className={`mx-auto ${activeTab === 4 && hidden === true ? "text-orange-500" : "text-white"} hover:text-orange-500 transition-all cursor-pointer`} onClick={() => switchTab(4)} />
+            <Bar />
+            <BiLink size={25} className={`mx-auto ${activeTab === 5 && hidden === true ? "text-orange-500" : "text-white"} hover:text-orange-500 transition-all cursor-pointer`} onClick={() => switchTab(5)} />
+            <Bar />
+            <MdMiscellaneousServices size={25} className={`mx-auto ${activeTab === 6 && hidden === true ? "text-orange-500" : "text-white"} hover:text-orange-500 transition-all cursor-pointer`} onClick={() => switchTab(6)} />
             <Bar className={`${hidden ? "block" : "hidden"}`} />
             <BsArrowBarRight size={25} className={`${hidden ? "block" : "hidden"} mx-auto text-white hover:text-orange-500 transition-all cursor-pointer`} onClick={() => setIsHidden(!hidden)} />
 
