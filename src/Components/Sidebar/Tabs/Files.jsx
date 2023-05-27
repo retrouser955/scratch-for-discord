@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { SiJavascript } from "react-icons/si"
 import { AiFillFolder } from "react-icons/ai"
-import { backUpFilesToLocal, loadFilesFromLocal } from '../../../../helpers/FileTools'
+import { backUpFilesToLocal, loadFilesFromLocal } from '../../../helpers/FileTools'
 import Swal from 'sweetalert2'
 import { AiFillFileAdd, AiOutlinePlus } from 'react-icons/ai'
 import { BsFillTrash3Fill, BsFillPencilFill } from "react-icons/bs"
-import { switchFiles } from "../../../../helpers/fileLoader.js"
+import { switchFiles } from "../../../helpers/fileLoader.js"
 
 const nameRegex = /^(?!\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\|\*\?\\:<>/$"]*[^\.\|\*\?\\:<>/$"]+$/;
 

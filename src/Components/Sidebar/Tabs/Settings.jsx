@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { oauth } from "../../../../sourceControl"
+import { oauth } from "../../../sourceControl"
 import Swal from 'sweetalert2'
 import { BsFillTrash3Fill,BsUpload} from "react-icons/bs"
 export default function Account() {
@@ -12,8 +12,8 @@ export default function Account() {
     <div>
       <b>Settings</b>
       {data}
-            <div className="w-full flex pl-2 h-7 justify-center">
-        <button className="excempt-button" onClick={() => {
+            <div className="w-full pl-2 h-7">
+        <button className="excempt-button flex pl-1" onClick={() => {
         
               const file = document.createElement('input')
               file.type = 'file'
@@ -31,8 +31,9 @@ export default function Account() {
           
         }}>
         <BsUpload className="text-green-600 cursor-pointer mr-1" />
+        <p> open file...</p>
         </button>
-        <button className="excempt-button" onClick={() => {
+        <button className="excempt-button flex" onClick={() => {
           Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -50,9 +51,26 @@ export default function Account() {
           })
         }}>
          <BsFillTrash3Fill className="text-red-600 cursor-pointer ml-1" />
+         <p> Delete workspace</p>
         </button>
-        <p> Edit - undo, redo, delete unused blocks, clean up blocks (this can be done automatically btw)</p>
-      </div>
+          </div>  
+          <div className="pl-4 pt-12 hidden">
+          <p className="font-bold">Workspace</p>
+          <ul className="pl-2 cursor-pointer">
+            <li>
+              <p>Undo</p>
+            </li>
+            <li>
+              <p>Redo</p>
+            </li>
+            <li>
+              <p>Clean up blocks</p>
+            </li>
+            <li>
+              <p>Delete unused blocks</p>
+            </li>
+          </ul>
+          </div>
     </div>
   )
 }

@@ -1,11 +1,11 @@
 import { useState } from "react"
-import SourceControl from "../SourceControl/SourceControl"
-import Files from "../Files/Files"
-import Account from "../Account/Account"
-import Settings from "../Settings/Settings"
-import Marketplace from "../Marketplace/Marketplace"
-import Links from "../Links/Links"
-import Misc from "../Misc/Misc"
+import SourceControl from "./Tabs/SourceControl"
+import Files from "./Tabs/Files"
+import Account from "./Tabs/Account"
+import Settings from "./Tabs/Settings"
+import Marketplace from "./Tabs/Marketplace"
+import Links from "./Tabs/Links"
+import Misc from "./Tabs/Misc"
 
 const SOURCE_MATCHER = [
     <Files />,
