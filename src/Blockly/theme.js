@@ -4,10 +4,10 @@ const DarkTheme = Blockly.Theme.defineTheme('scratch-for-discord', {
     'name': 'true_dark',
     'base': Blockly.Themes.Classic,
     'componentStyles': {
-        'workspaceBackgroundColour': '#030303',
-        'toolboxBackgroundColour': '#121212',
+        'workspaceBackgroundColour': '#1a1a1a',
+        'toolboxBackgroundColour': '#262626',
         'toolboxForegroundColour': '#fff',
-        'flyoutBackgroundColour': '#121212',
+        'flyoutBackgroundColour': '#262626',
         'flyoutForegroundColour': '#ccc',
         'flyoutOpacity': .6,
         'scrollbarColour': '#797979',
