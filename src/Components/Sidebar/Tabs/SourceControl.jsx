@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {pull, push, selectRepo, selectBranch} from "../../../../sourceControl"
+import {pull, push, selectRepo, selectBranch} from "../../../sourceControl"
 
 function Stats() {
   const [repo, setRepo] = useState(localStorage.getItem("repo") || 'Not selected');

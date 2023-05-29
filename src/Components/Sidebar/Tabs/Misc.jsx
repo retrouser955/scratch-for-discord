@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { oauth } from "../../../../sourceControl"
-
+import Swal from 'sweetalert2'
+import { BsFillTrash3Fill,BsUpload} from "react-icons/bs"
 export default function Account() {
   const [data, setData] = useState(undefined)
 
@@ -9,7 +9,8 @@ export default function Account() {
 
   return (
     <div>
-      <b>Settings</b>
+      <b>Misc</b>
+      <p>Changelog, shortcuts, credit</p>
       {data}
     </div>
   )

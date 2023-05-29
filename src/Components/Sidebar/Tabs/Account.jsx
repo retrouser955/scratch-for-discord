@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { oauth } from "../../../../sourceControl"
+import { oauth } from "../../../sourceControl"
 
 function UserCard({ userData }) {
   return (
+
     <div className="w-[80%] h-64 border-2 pt-5 border-white rounded-lg mx-auto">
       <img src={userData.avatar_url} alt={`${userData.login} avatar`} className="mx-auto rounded-full w-[70%] mb-2" />
       <h1 className="text-center text-2xl truncate text-white font-semibold">{userData.name}</h1>
